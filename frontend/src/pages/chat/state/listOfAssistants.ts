@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useApi } from 'src/api';
-import { useStateOfSelectedAssistantId } from 'src/pages/chat/state/chat';
+import { useStateOfChat } from 'src/pages/chat/state/chat';
 import { useListOfAssistantsStore } from './zustand/assistantStore';
 
 /**
@@ -29,7 +29,10 @@ export const useListOfAssistantsInit = () => {
 export const useStateOfAssistants = () => useListOfAssistantsStore((s) => s.assistants);
 
 export const useStateOfSelectedAssistant = () => {
-  const assistantId = useStateOfSelectedAssistantId();
-  const assistants = useListOfAssistantsStore((s) => s.assistants);
-  return assistants.find((x) => x.id === assistantId || assistants[0]);
+  const chat = useStateOfChat();
+  const assistants = useStateOfAssistants();
+  // without useMemo the assistant will be overridden by the previous chat.configurationId and a change in the assistant dropdown will have no effect
+  return useMemo(() => {
+    return assistants.find((x) => x.id === chat.configurationId) || assistants[0];
+  }, [assistants, chat.configurationId]);
 };

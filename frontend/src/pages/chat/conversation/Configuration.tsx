@@ -38,7 +38,7 @@ export const Configuration = ({ canEditConfiguration }: ConfigurationProps) => {
         renderOption={renderSelectOption}
         onChange={(value) => value && updateChat.mutate({ configurationId: +value })}
         value={assistant?.id + ''}
-        data={assistants.map((c) => ({ value: c.id + '', label: c.name, description: c.description }))}
+        data={assistants.map((c) => ({ value: c.id + '', label: c.name }))}
         disabled={!canEditConfiguration}
         size="md"
         data-testid="chat-assistent-select"

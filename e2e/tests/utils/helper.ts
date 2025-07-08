@@ -11,6 +11,10 @@ export async function login(page: Page, user?: { email: string; password: string
   await page.getByTestId('menu user').waitFor({ state: 'visible' });
 }
 
+export async function goto(page: Page, relativePath: string) {
+  await page.goto(`${config.URL}${relativePath}`);
+}
+
 export async function enterAdminArea(page: Page) {
   if (await hasMenuItem(page, { name: 'Admin' })) {
     await page.getByRole('menuitem', { name: 'Admin' }).click();
@@ -112,7 +116,7 @@ export async function cleanup(page: Page) {
   await enterUserArea(page);
 }
 
-async function clearMessages(page: Page) {
+export async function clearMessages(page: Page) {
   await page.getByTestId('menu user').click();
   await page.getByRole('menuitem', { name: 'Clear conversations' }).click();
   const confirm = page.getByRole('button', { name: 'Confirm deletion' });
@@ -141,6 +145,15 @@ export async function createBucket(
     .filter({ hasText: /^Bucket is valid./ })
     .click();
   await save(page);
+}
+
+export async function deleteFirstConversation(page: Page) {
+  // Assuming there's a way to identify and delete the first conversation
+  await page.locator('svg.tabler-icon-dots').first().click();
+  const dropdown = page.locator('.mantine-Menu-dropdown');
+  await expect(dropdown).toBeVisible();
+  await dropdown.locator('text=Delete').click();
+  await page.locator('text=Conversation deleted successfully').locator('button').click();
 }
 
 export async function deleteBucket(page: Page, bucket: { name: string }, ifExists = false) {
