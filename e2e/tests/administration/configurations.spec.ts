@@ -170,4 +170,14 @@ test('Configuration Management', async ({ page }) => {
     const editedRows = configList.filter({ hasText: configNewName });
     await expect(editedRows).toHaveCount(0);
   });
+
+  // DO: new chat should keep old assistant selected
+  //
+  // DO: return to last selected chat from admin page, via user-icon menu.
+  // DO: return to last selected chat from admin page, via logo click.
+  // DO: initial load of '', '/chat', '/chat/' should open a new chat (with the last used assistant on this client?)
+  // DO: should keep selected assistant when a conversation is deleted.
+  // DO: should keep selected assistant when all conversations are deleted.
+  //
+  // DO: should stop showing auto-scroll button, if new chat is opend, while button was visible.
 });
