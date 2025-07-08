@@ -7,11 +7,11 @@ import { useConversationFiles } from 'src/hooks/api/files';
 import { buildError } from 'src/lib';
 import { texts } from 'src/texts';
 import { filterFilesByFileNameExtensions, matchExtension } from './conversation/chat-input-utils';
-import { useStateOfSelectedAssistentId, useStateOfSelectedChatId } from './state/chat';
+import { useStateOfSelectedAssistantId, useStateOfSelectedChatId } from './state/chat';
 
 export const useChatDropzone = () => {
   const api = useApi();
-  const assistantId = useStateOfSelectedAssistentId();
+  const assistantId = useStateOfSelectedAssistantId();
   const chatId = useStateOfSelectedChatId();
   const { data: userBucket } = useConversationBucketAvailabilities(assistantId);
   const upload = useMutation({

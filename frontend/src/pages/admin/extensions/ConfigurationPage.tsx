@@ -7,6 +7,7 @@ import { ConfigurationDto, useApi } from 'src/api';
 import { Icon, Page } from 'src/components';
 import { useEventCallback, useTransientNavigate } from 'src/hooks';
 import { buildError } from 'src/lib';
+import { useListOfAssistantsStore } from 'src/pages/chat/state/zustand/assistantStore';
 import { texts } from 'src/texts';
 import { Configuration } from './Configuration.tsx';
 import { EmptyPage } from './EmptyPage';
@@ -17,6 +18,7 @@ import { useConfigurationStore } from './state';
 export function ConfigurationPage() {
   const api = useApi();
   const { i18n } = useTranslation();
+  const listOfAssistantsStore = useListOfAssistantsStore();
 
   const navigate = useTransientNavigate();
   const [toCreate, setToCreate] = useState<boolean>();
@@ -32,7 +34,7 @@ export function ConfigurationPage() {
     if (loadedConfigurations) {
       setConfigurations(loadedConfigurations.items);
     }
-  }, [loadedConfigurations, setConfigurations]);
+  }, [listOfAssistantsStore, loadedConfigurations, setConfigurations]);
 
   const deleting = useMutation({
     mutationFn: (configuration: ConfigurationDto) => {

@@ -4,10 +4,10 @@ import { toast } from 'react-toastify';
 import { ConversationDto, useApi } from 'src/api';
 import { useTransientContext, useTransientNavigate } from 'src/hooks';
 import { buildError } from 'src/lib';
+import { useStateOfAssistants } from 'src/pages/chat/state/listOfAssistants';
 import { texts } from 'src/texts';
 import { useChatStore } from './zustand/chatStore';
 import { useListOfChatsStore } from './zustand/listOfChatsStore';
-import { useStateOfSelectedAssistentId } from './chat';
 
 /**
  * @description Initially loads the list of all known chats to make it
@@ -108,16 +108,12 @@ export const useMutateNewChat = () => {
   const api = useApi();
   const context = useTransientContext();
   const navigate = useTransientNavigate();
-  const { data: loadedAssistants } = useQuery({
-    queryKey: ['enabled-configurations'],
-    queryFn: () => api.extensions.getConfigurations(true),
-    refetchOnWindowFocus: false,
-  });
+  const assistants = useStateOfAssistants();
 
   return useMutation({
     mutationFn: (assistantId?: number) =>
       api.conversations.postConversation({
-        configurationId: loadedAssistants?.items.find((x) => x.id === assistantId)?.id ?? loadedAssistants?.items[0].id,
+        configurationId: assistants.find((x) => x.id === assistantId)?.id ?? assistants?.[0].id,
         context,
       }),
     onSuccess: (chat) => navigate(`/chat/${chat.id}`),

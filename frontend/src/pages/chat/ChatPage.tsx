@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import { CollapseButton, ProfileButton } from 'src/components';
 import { NavigationBar } from 'src/components/NavigationBar';
 import { useSidebarState, useTheme } from 'src/hooks';
+import { useListOfAssistantsInit } from 'src/pages/chat/state/listOfAssistants';
 import { texts } from 'src/texts';
 import { isMobile } from '../utils';
 import { ConversationItems } from './ConversationItems';
@@ -13,7 +14,7 @@ import { NewChatRedirect } from './NewChatRedirect';
 import { DocumentSource, SourcesChunkPreview } from './SourcesChunkPreview';
 import { ConversationPage } from './conversation/ConversationPage';
 import { Files } from './files/Files';
-import { useStateOfSelectedAssistentId, useStateOfSelectedChatId } from './state/chat';
+import { useStateOfSelectedAssistantId, useStateOfSelectedChatId } from './state/chat';
 import { useListOfChatsInit, useMutateNewChat, useStateMutateRemoveAllChats, useStateOfChatEmptiness } from './state/listOfChats';
 import { useUserBucket } from './useUserBucket';
 
@@ -49,10 +50,11 @@ const getPanelSizes = (isRightPanelOpen: boolean) => {
 export function ChatPage() {
   const { theme } = useTheme();
   const isMobileView = isMobile();
+  useListOfAssistantsInit();
   useListOfChatsInit();
 
   const [selectedDocument, setSelectedDocument] = useState<DocumentSource | undefined>();
-  const selectedAssistantId = useStateOfSelectedAssistentId();
+  const selectedAssistantId = useStateOfSelectedAssistantId();
   const { userBucket } = useUserBucket(selectedAssistantId);
   const checkIfEmptyChat = useStateOfChatEmptiness();
   const selectedChatId = useStateOfSelectedChatId();
