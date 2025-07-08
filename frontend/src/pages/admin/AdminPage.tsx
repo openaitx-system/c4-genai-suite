@@ -4,13 +4,13 @@ import { CollapseButton, ProfileButton, TransientNavigate, TransientNavLink } fr
 import { NavigationBar } from 'src/components/NavigationBar';
 import { useTheme } from 'src/hooks';
 import { texts } from 'src/texts';
+import { useStateOfSelectedChatId } from '../chat/state/chat';
 import { DashboardPage } from './dashboard/DashboardPage';
 import { ConfigurationPage } from './extensions/ConfigurationPage.tsx';
 import { BucketsPage } from './files/BucketsPage';
 import { ThemePage } from './theme/ThemePage';
 import { UserGroupsPage } from './user-groups/UserGroupsPage';
 import { UsersPage } from './users/UsersPage';
-import { useStateOfSelectedChatId } from '../chat/state/chat.ts';
 
 export function AdminPage() {
   const [isNavigationBarOpen, setIsNavigationBarOpen] = useState(true);

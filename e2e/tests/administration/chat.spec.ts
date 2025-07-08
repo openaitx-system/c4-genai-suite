@@ -1,4 +1,3 @@
-import { th, ur } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 import {
   addVisionFileExtensionToConfiguration,
@@ -6,7 +5,6 @@ import {
   cleanup,
   clearMessages,
   createConfiguration,
-  deleteFirstConversation,
   enterAdminArea,
   enterUserArea,
   goto,
@@ -195,10 +193,15 @@ test('Chat', async ({ page, browserName }) => {
     const oldUrl = page.url();
     await selectConfiguration(page, { name: thirdAssistant });
     await clearMessages(page);
-    const newUrl = page.url();
+
+    await page.waitForURL(
+      (currentUrl) => {
+        return currentUrl.href !== oldUrl;
+      },
+      { timeout: 5000 },
+    );
 
     await checkSelectedConfiguration(page, { name: thirdAssistant });
-    expect(newUrl).not.toBe(oldUrl);
   });
 
   await test.step('should keep selected assistant when a conversation is deleted', async () => {

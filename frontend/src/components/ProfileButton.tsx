@@ -3,10 +3,10 @@ import { IconLogout, IconMessage, IconTrash, IconUserCog } from '@tabler/icons-r
 import { NavLink } from 'react-router-dom';
 import { ConfirmDialog } from 'src/components/ConfirmDialog';
 import { useLogoutUrl, useProfile } from 'src/hooks';
+import { useStateOfSelectedChatId } from 'src/pages/chat/state/chat';
 import { isMobile } from 'src/pages/utils';
 import { texts } from 'src/texts';
 import { Avatar } from './Avatar';
-import { useStateOfSelectedChatId } from 'src/pages/chat/state/chat';
 
 interface ProfileButtonProps {
   onClearConversations?: () => void;

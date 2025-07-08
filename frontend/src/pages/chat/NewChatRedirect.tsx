@@ -14,6 +14,7 @@ export function NewChatRedirect() {
       hasRun.current = true;
       createNewConversation.mutate(assistantId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assistantId, createNewConversation]);
 
   return null;

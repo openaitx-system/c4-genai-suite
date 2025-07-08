@@ -488,10 +488,11 @@ export async function checkSelectedConfiguration(page: Page, configuration: { na
 
 export async function selectConfiguration(page: Page, configuration: { name: string }) {
   await page.getByTestId('chat-assistent-select').click();
-  const element = page.locator(`p:has-text("${configuration.name}")`).first();
+
+  const element = page.locator(`p`).getByText(configuration.name, { exact: true });
   await expect(element).toBeVisible();
   await element.click();
-  await page.waitForTimeout(1000);
+  await page.waitForLoadState('networkidle');
 }
 
 export async function navigateToUserAdministration(page: Page) {

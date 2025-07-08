@@ -3,7 +3,8 @@ import {
   enterUserArea,
   login,
   navigateToConfigurationAdministration,
-  navigateToThemeAdministration, newChat,
+  navigateToThemeAdministration,
+  newChat,
   selectConfiguration,
   selectOption,
 } from '../utils/helper';
