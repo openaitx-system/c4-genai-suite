@@ -6,6 +6,7 @@ import { useLogoutUrl, useProfile } from 'src/hooks';
 import { isMobile } from 'src/pages/utils';
 import { texts } from 'src/texts';
 import { Avatar } from './Avatar';
+import { useStateOfSelectedChatId } from 'src/pages/chat/state/chat';
 
 interface ProfileButtonProps {
   onClearConversations?: () => void;
@@ -15,6 +16,7 @@ interface ProfileButtonProps {
 export const ProfileButton = ({ onClearConversations, section }: ProfileButtonProps) => {
   const profile = useProfile();
   const logoutUrl = useLogoutUrl();
+  const chatId = useStateOfSelectedChatId();
 
   return (
     <Menu width={250}>
@@ -35,7 +37,7 @@ export const ProfileButton = ({ onClearConversations, section }: ProfileButtonPr
 
       <Menu.Dropdown>
         {section === 'admin' && (
-          <Menu.Item leftSection={<IconMessage size={14} />} component={NavLink} to="/">
+          <Menu.Item leftSection={<IconMessage size={14} />} component={NavLink} to={`/chat/${chatId || ''}`}>
             {texts.common.chat}
           </Menu.Item>
         )}

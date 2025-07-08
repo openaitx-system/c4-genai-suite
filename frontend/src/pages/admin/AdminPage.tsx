@@ -10,13 +10,16 @@ import { BucketsPage } from './files/BucketsPage';
 import { ThemePage } from './theme/ThemePage';
 import { UserGroupsPage } from './user-groups/UserGroupsPage';
 import { UsersPage } from './users/UsersPage';
+import { useStateOfSelectedChatId } from '../chat/state/chat.ts';
 
 export function AdminPage() {
   const [isNavigationBarOpen, setIsNavigationBarOpen] = useState(true);
   const { theme } = useTheme();
+  const chatId = useStateOfSelectedChatId();
+
   return (
     <div className="flex h-screen flex-col">
-      <NavigationBar theme={theme} redirectTo={'/'} />
+      <NavigationBar theme={theme} redirectTo={`/chat/${chatId || ''}`} />
       <div className="sidebar-admin flex min-h-0 grow" data-testid="sidebar-admin">
         {isNavigationBarOpen && (
           <div className="shadow-xxl flex w-48 shrink-0 flex-col justify-between bg-white">

@@ -1,7 +1,7 @@
 import { ActionIcon } from '@mantine/core';
 import { IconArrowDown } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useParams } from 'react-router-dom';
 import { FileDto, useApi } from 'src/api';
@@ -21,13 +21,11 @@ const transformMimeTypes = (mimeTypes: string[]) => Object.fromEntries(mimeTypes
 
 interface ConversationPageProps {
   textareaRef: React.RefObject<HTMLTextAreaElement>;
-  onConfigurationSelected: (configurationId: number) => void;
-  selectedConfigurationId: number;
   selectDocument: (chatId: number, messageId: number, documentUri: string) => void;
 }
 
 export function ConversationPage(props: ConversationPageProps) {
-  const { textareaRef, selectedConfigurationId, onConfigurationSelected, selectDocument } = props;
+  const { textareaRef, selectDocument } = props;
 
   const api = useApi();
   const chatParam = useParams<'id'>();
@@ -53,20 +51,10 @@ export function ConversationPage(props: ConversationPageProps) {
   const isNewConversation = messages.length === 0 && !!history;
 
   const configuration = useMemo(() => {
-    return (
-      configurations.find((x) => x.id === chat.configurationId) ||
-      configurations.find((x) => x.id === selectedConfigurationId) ||
-      configurations[0]
-    );
-  }, [selectedConfigurationId, configurations, chat.configurationId]);
+    return configurations.find((x) => x.id === chat.configurationId) || configurations[0];
+  }, [configurations, chat.configurationId]);
 
   const llmLogo = configuration?.extensions?.find((x) => x.type === 'llm')?.logo;
-
-  useEffect(() => {
-    if (configuration) {
-      onConfigurationSelected(configuration.id);
-    }
-  }, [onConfigurationSelected, configuration]);
 
   const agentName = useMemo(() => {
     return configuration?.agentName || theme.agentName || texts.chat.sourceAI;
@@ -77,10 +65,7 @@ export function ConversationPage(props: ConversationPageProps) {
     setTimeout(() => scrollToBottom(), 500);
     return false;
   });
-  const { uploadLimitReached, allowedFileNameExtensions, handleUploadFile, multiple } = useChatDropzone(
-    selectedConfigurationId,
-    chatId,
-  );
+  const { uploadLimitReached, allowedFileNameExtensions, handleUploadFile, multiple } = useChatDropzone();
   const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
     multiple,
     onDrop: handleUploadFile,

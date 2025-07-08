@@ -13,7 +13,7 @@ import { NewChatRedirect } from './NewChatRedirect';
 import { DocumentSource, SourcesChunkPreview } from './SourcesChunkPreview';
 import { ConversationPage } from './conversation/ConversationPage';
 import { Files } from './files/Files';
-import { useStateOfSelectedChatId } from './state/chat';
+import { useStateOfSelectedAssistentId, useStateOfSelectedChatId } from './state/chat';
 import { useListOfChatsInit, useMutateNewChat, useStateMutateRemoveAllChats, useStateOfChatEmptiness } from './state/listOfChats';
 import { useUserBucket } from './useUserBucket';
 
@@ -52,7 +52,8 @@ export function ChatPage() {
   useListOfChatsInit();
 
   const [selectedDocument, setSelectedDocument] = useState<DocumentSource | undefined>();
-  const { userBucket, selectedConfigurationId, setSelectedConfigurationId } = useUserBucket();
+  const selectedAssistantId = useStateOfSelectedAssistentId();
+  const { userBucket } = useUserBucket(selectedAssistantId);
   const checkIfEmptyChat = useStateOfChatEmptiness();
   const selectedChatId = useStateOfSelectedChatId();
   const removeAllChats = useStateMutateRemoveAllChats();
@@ -68,7 +69,7 @@ export function ChatPage() {
   const openNewChatIfNeeded = async () => {
     if (selectedChatId) {
       if (await checkIfEmptyChat(selectedChatId)) textareaRef.current?.focus();
-      else createNewChat.mutate();
+      else createNewChat.mutate(selectedAssistantId);
     }
   };
 
@@ -131,8 +132,6 @@ export function ChatPage() {
                   element={
                     <ConversationPage
                       textareaRef={textareaRef}
-                      selectedConfigurationId={selectedConfigurationId}
-                      onConfigurationSelected={setSelectedConfigurationId}
                       selectDocument={(conversationId, messageId, documentUri) => {
                         setSelectedDocument({ conversationId, messageId, documentUri });
                         setSidebarRight(true);
@@ -176,7 +175,7 @@ export function ChatPage() {
                 <SourcesChunkPreview onClose={() => setSelectedDocument(undefined)} document={selectedDocument} />
               ) : (
                 userBucket && (
-                  <Files configurationId={selectedConfigurationId} userBucket={userBucket} conversationId={selectedChatId} />
+                  <Files configurationId={selectedAssistantId} userBucket={userBucket} conversationId={selectedChatId} />
                 )
               )}
             </Panel>

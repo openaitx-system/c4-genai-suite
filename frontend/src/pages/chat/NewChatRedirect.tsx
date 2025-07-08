@@ -8,7 +8,7 @@ export function NewChatRedirect() {
   useEffect(() => {
     if (!hasRun.current) {
       hasRun.current = true;
-      createNewConversation.mutate();
+      createNewConversation.mutate(0);
     }
   }, [createNewConversation]);
 
